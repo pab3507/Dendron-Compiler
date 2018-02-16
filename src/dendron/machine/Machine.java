@@ -273,6 +273,37 @@ public class Machine {
         }
     }
 
+    /**
+     * The LOAD instruction
+     */
+    public static class Load implements Instruction{
+        private String name;
+
+        public Load(String ident){
+            this.name = ident;
+        }
+
+        /**
+         * Run the microsteps for the LOAD instruction.
+         */
+        @Override
+        public void execute() {
+            int val = table.get(this.name);
+            stack.push(val);
+
+        }
+
+        /**
+         * Show the LOAD instruction as plain text.
+         * @return "LOAD"
+         */
+        @Override
+        public String toString() {
+            return "LOAD";
+        }
+
+    }
+
     //
     // UNARY OPERATIONS
     //
@@ -323,35 +354,5 @@ public class Machine {
         }
     }
 
-    /**
-     * The LOAD instruction
-     */
-    public static class Load implements Instruction{
-        private String name;
-
-        public Load(String ident){
-            this.name = ident;
-        }
-
-        /**
-         * Run the microsteps for the LOAD instruction.
-         */
-        @Override
-        public void execute() {
-            int val = table.get(this.name);
-            stack.push(val);
-
-        }
-
-        /**
-         * Show the LOAD instruction as plain text.
-         * @return "LOAD"
-         */
-        @Override
-        public String toString() {
-            return "LOAD";
-        }
-
-    }
 
 }
