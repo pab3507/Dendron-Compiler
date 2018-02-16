@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.HashMap;
 import dendron.Errors;
 
+import static java.lang.Math.sqrt;
+
 /**
  * An abstraction of a computing machine that reads instructions
  * and executes them. It has an instruction set, a symbol table
@@ -90,30 +92,6 @@ public class Machine {
     }
 
     /**
-     * The ADD instruction
-     */
-    public static class Add implements Instruction {
-        /**
-         * Run the microsteps for the ADD instruction.
-         */
-        @Override
-        public void execute() {
-            int op2 = stack.pop();
-            int op1 = stack.pop();
-            stack.push( op1 + op2 );
-        }
-
-        /**
-         * Show the ADD instruction as plain text.
-         * @return "ADD"
-         */
-        @Override
-        public String toString() {
-            return "ADD";
-        }
-    }
-
-    /**
      * The STORE instruction
      */
     public static class Store implements Instruction {
@@ -144,7 +122,236 @@ public class Machine {
         }
     }
 
+    /**
+     * The PushConst instruction
+     */
+    public static class PushConst implements Instruction{
+        private final int constant;
+        public PushConst(int constant){
+            this.constant = constant;
+        }
+
+        /**
+         * Run the microsteps for the PushConst instruction.
+         */
+        @Override
+        public void execute() {
+            stack.push(constant);
+        }
+
+        /**
+         * Show the PushConst instruction as plain text.
+         * @return "PushConst"
+         */
+        @Override
+        public String toString() {
+            return "PushConst";
+        }
+    }
+
+    /**
+     * The PRINT instruction
+     */
+    public static class Print implements Instruction{
+
+        /**
+         * Run the microsteps for the PRINT instruction.
+         */
+        @Override
+        public void execute() {
+            int val = stack.pop();
+            System.out.printf("*** %d", val);
+        }
+
+        /**
+         * Show the PRINT instruction as plain text.
+         * @return "PRINT"
+         */
+        @Override
+        public String toString() {
+            return "PRINT";
+        }
+    }
+
     //
-    // ENTER YOUR CODE FOR THE OTHER INSTRUCTION CLASSES HERE.
+    // BINARY OPERATIONS
     //
+
+    /**
+     * The ADD instruction
+     */
+    public static class Add implements Instruction {
+        /**
+         * Run the microsteps for the ADD instruction.
+         */
+        @Override
+        public void execute() {
+            int op2 = stack.pop();
+            int op1 = stack.pop();
+            stack.push( op1 + op2 );
+        }
+
+        /**
+         * Show the ADD instruction as plain text.
+         * @return "ADD"
+         */
+        @Override
+        public String toString() {
+            return "ADD";
+        }
+    }
+
+    /**
+     * The SUB instruction
+     */
+    public static class Subtract implements Instruction {
+        /**
+         * Run the microsteps for the SUB instruction.
+         */
+        @Override
+        public void execute() {
+            int op2 = stack.pop();
+            int op1 = stack.pop();
+            stack.push( op1 - op2 );
+        }
+
+        /**
+         * Show the SUB instruction as plain text.
+         * @return "SUB"
+         */
+        @Override
+        public String toString() {
+            return "SUB";
+        }
+    }
+
+    /**
+     * The DIV instruction
+     */
+    public static class Divide implements Instruction {
+        /**
+         * Run the microsteps for the DIV instruction.
+         */
+        @Override
+        public void execute() {
+            int op2 = stack.pop();
+            int op1 = stack.pop();
+            stack.push( op1 / op2 );
+        }
+
+        /**
+         * Show the DIV instruction as plain text.
+         * @return "DIV"
+         */
+        @Override
+        public String toString() {
+            return "DIV";
+        }
+    }
+
+    /**
+     * The MUL instruction
+     */
+    public static class Multiply implements Instruction {
+        /**
+         * Run the microsteps for the MUL instruction.
+         */
+        @Override
+        public void execute() {
+            int op2 = stack.pop();
+            int op1 = stack.pop();
+            stack.push( op1 * op2 );
+        }
+
+        /**
+         * Show the MUL instruction as plain text.
+         * @return "MUL"
+         */
+        @Override
+        public String toString() {
+            return "MUL";
+        }
+    }
+
+    //
+    // UNARY OPERATIONS
+    //
+
+    /**
+     * The NEG instruction
+     */
+    public static class Negate implements Instruction {
+        /**
+         * Run the microsteps for the NEG instruction.
+         */
+        @Override
+        public void execute() {
+            int op1 = stack.pop();
+            stack.push( -op1 );
+        }
+
+        /**
+         * Show the NEG instruction as plain text.
+         * @return "NEG"
+         */
+        @Override
+        public String toString() {
+            return "NEG";
+        }
+    }
+
+    /**
+     * The SQRT instruction
+     */
+    public static class SquareRoot implements Instruction {
+        /**
+         * Run the microsteps for the SQRT instruction.
+         */
+        @Override
+        public void execute() {
+            int op1 = stack.pop();
+            stack.push( (int) sqrt(op1) );
+        }
+
+        /**
+         * Show the SQRT instruction as plain text.
+         * @return "SQRT"
+         */
+        @Override
+        public String toString() {
+            return "SQRT";
+        }
+    }
+
+    /**
+     * The LOAD instruction
+     */
+    public static class Load implements Instruction{
+        private String name;
+
+        public Load(String ident){
+            this.name = ident;
+        }
+
+        /**
+         * Run the microsteps for the LOAD instruction.
+         */
+        @Override
+        public void execute() {
+            int val = table.get(this.name);
+            stack.push(val);
+
+        }
+
+        /**
+         * Show the LOAD instruction as plain text.
+         * @return "LOAD"
+         */
+        @Override
+        public String toString() {
+            return "LOAD";
+        }
+
+    }
+    
 }
