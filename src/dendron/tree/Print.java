@@ -1,4 +1,33 @@
 package dendron.tree;
 
-public class Print {
+import dendron.machine.Machine;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class Print implements ActionNode {
+    private ExpressionNode printee;
+
+    public Print(ExpressionNode printee){
+        this.printee = printee;
+    }
+
+    @Override
+    public void execute(Map<String, Integer> symTab) {
+        printee.evaluate(symTab);
+    }
+
+    @Override
+    public void infixDisplay() {
+        System.out.printf("Print ");
+        printee.infixDisplay();
+    }
+
+    @Override
+    public List<Machine.Instruction> emit() {
+        ArrayList<Machine.Instruction> list = new ArrayList<>();
+        list.add(new Machine.Print());
+        return list;
+    }
 }
