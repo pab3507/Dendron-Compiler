@@ -160,7 +160,7 @@ public class Machine {
         @Override
         public void execute() {
             int val = stack.pop();
-            System.out.printf("*** %d", val);
+            System.out.printf("*** %d\n", val);
         }
 
         /**
