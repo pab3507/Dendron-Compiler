@@ -110,7 +110,11 @@ public class Machine {
          */
         @Override
         public void execute() {
-            table.put( this.name, stack.pop() );
+            if (stack.size()>=1){
+                table.put( this.name, stack.pop() );
+            } else {
+                Errors.report(Errors.Type.PREMATURE_END,"Program has reached PREMATURE_END");
+            }
         }
         /**
          * Show the STORE instruction as plain text.
@@ -159,8 +163,12 @@ public class Machine {
          */
         @Override
         public void execute() {
+            if (stack.size()>=1){
             int val = stack.pop();
             System.out.printf("*** %d\n", val);
+            } else {
+                Errors.report(Errors.Type.PREMATURE_END,"Program has reached PREMATURE_END");
+            }
         }
 
         /**
@@ -186,9 +194,13 @@ public class Machine {
          */
         @Override
         public void execute() {
+            if (stack.size()>=2){
             int op2 = stack.pop();
             int op1 = stack.pop();
             stack.push( op1 + op2 );
+            } else {
+                Errors.report(Errors.Type.PREMATURE_END,"Program has reached PREMATURE_END");
+            }
         }
 
         /**
@@ -210,10 +222,15 @@ public class Machine {
          */
         @Override
         public void execute() {
-            int op2 = stack.pop();
-            int op1 = stack.pop();
-            stack.push( op1 - op2 );
+            if (stack.size() >= 2) {
+                int op2 = stack.pop();
+                int op1 = stack.pop();
+                stack.push(op1 - op2);
+            } else {
+                Errors.report(Errors.Type.PREMATURE_END, "Program has reached PREMATURE_END");
+            }
         }
+
 
         /**
          * Show the SUB instruction as plain text.
@@ -234,9 +251,17 @@ public class Machine {
          */
         @Override
         public void execute() {
+            if (stack.size()>=2){
             int op2 = stack.pop();
             int op1 = stack.pop();
-            stack.push( op1 / op2 );
+            if (op2!= 0) {
+                stack.push( op1 / op2 );
+            } else {
+                Errors.report(Errors.Type.DIVIDE_BY_ZERO,"Integer divide by zero");
+            }
+            } else {
+                Errors.report(Errors.Type.PREMATURE_END,"Program has reached PREMATURE_END");
+            }
         }
 
         /**
@@ -258,9 +283,13 @@ public class Machine {
          */
         @Override
         public void execute() {
-            int op2 = stack.pop();
-            int op1 = stack.pop();
-            stack.push( op1 * op2 );
+            if (stack.size()>=2) {
+                int op2 = stack.pop();
+                int op1 = stack.pop();
+                stack.push(op1 * op2);
+            } else {
+                Errors.report(Errors.Type.PREMATURE_END,"Program has reached PREMATURE_END");
+            }
         }
 
         /**
@@ -288,8 +317,12 @@ public class Machine {
          */
         @Override
         public void execute() {
-            int val = table.get(this.name);
-            stack.push(val);
+            if (table.containsKey(this.name)) {
+                int val = table.get(this.name);
+                stack.push(val);
+            } else {
+                Errors.report(Errors.Type.UNINITIALIZED,"Variable is not initialized");
+            }
 
         }
 
