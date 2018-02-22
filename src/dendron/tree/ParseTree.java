@@ -1,20 +1,25 @@
 package dendron.tree;
 
+import dendron.Errors;
 import dendron.machine.Machine;
 import dendron.tree.ActionNode;
 import dendron.tree.ExpressionNode;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Operations that are done on a Dendron code parse tree.
  *
  * THIS CLASS IS UNIMPLEMENTED. All methods are stubbed out.
  *
- * @author YOUR NAME HERE
+ * @author Pedro Creton
  */
 public class ParseTree {
+    private Map<String,Integer> symTab;
+    private ArrayList<List<String>> tokensClusters = new ArrayList<>();
+    private ArrayList<ActionNode> actions = new ArrayList<>();
+    private Program program;
+    private Stack stack = new Stack();
 
     /**
      * Parse the entire list of program tokens. The program is a
@@ -24,6 +29,28 @@ public class ParseTree {
      * @param program the token list (Strings)
      */
     public ParseTree( List< String > program ) {
+        this.symTab = new HashMap<>();
+        this.program = new Program();
+        for (String token : program){
+            switch (token){
+                case ":=":
+                case "@":
+                    tokensClusters.add(new ArrayList<>());
+                    tokensClusters.get(tokensClusters.size()-1).add(token);
+                    break;
+                default:
+                    tokensClusters.get(tokensClusters.size()-1).add(token);
+            }
+        }
+
+        for (List<String> tokenCluster : tokensClusters){
+            actions.add(parseAction(tokenCluster));
+        }
+
+        for (ActionNode action : actions){
+            this.program.addAction(action);
+        }
+
     }
 
     /**
@@ -33,6 +60,20 @@ public class ParseTree {
      * @return a parse tree for the action
      */
     private ActionNode parseAction( List< String > program ) {
+        switch (program.get(0)){
+            case "@":
+                return new Print(parseExpr(program.subList(1,program.size())));
+            case ":=":
+                if (program.get(1).matches( "^[a-zA-Z].*" )) {
+                    return new Assignment(program.get(1),parseExpr(program.subList(2,program.size())));
+                } else {
+                    Errors.report(Errors.Type.ILLEGAL_VALUE, "Not a valid variable name");
+                    break;
+                }
+            default:
+                Errors.report(Errors.Type.ILLEGAL_VALUE, "Not a valid statement");
+                break;
+        }
         return null;
     }
 
@@ -43,6 +84,43 @@ public class ParseTree {
      * @return a parse tree for this expression
      */
     private ExpressionNode parseExpr( List< String > program ) {
+        String firstToken = program.get(0);
+        int idxNextExpr = 1;
+        switch (firstToken){
+            case "+":
+            case "-":
+            case "*":
+            case "/":
+                while (program.get(idxNextExpr).matches("[+-/*_#]")){
+                    idxNextExpr++;
+                }
+                int idxNextExpr2 = idxNextExpr;
+                while (idxNextExpr2<program.size() && !program.get(idxNextExpr2).matches("[+-/*_#]")){
+                    idxNextExpr2++;
+                }
+
+                return new BinaryOperation(firstToken, parseExpr(program.subList(1, idxNextExpr+1)), parseExpr(program.subList(idxNextExpr+1, program.size())));
+
+            case "_":
+            case "#":
+                while (program.get(idxNextExpr).matches("[+-/*_#]")){
+                    idxNextExpr++;
+                }
+                while (idxNextExpr<program.size() && !program.get(idxNextExpr).matches("[+-/*_#]")){
+                    idxNextExpr++;
+                }
+                return new UnaryOperation(firstToken,parseExpr(program.subList(1,idxNextExpr)));
+
+            default:
+                if (firstToken.matches( "^[a-zA-Z].*" )){
+                    return new Variable(firstToken);
+                } else if (firstToken.matches("[-+]?\\d+")){
+                    return new Constant(Integer.parseInt(firstToken));
+                } else {
+                    Errors.report(Errors.Type.ILLEGAL_VALUE, "Not a valid Expression");
+                }
+
+        }
         return null;
     }
 
@@ -52,6 +130,9 @@ public class ParseTree {
      * @see dendron.tree.ActionNode#infixDisplay()
      */
     public void displayProgram() {
+        System.out.println("The Program, with expressions in infix notation:\n");
+        program.infixDisplay();
+        System.out.println();
     }
 
     /**
@@ -59,6 +140,11 @@ public class ParseTree {
      * @see dendron.tree.ActionNode#execute(Map)
      */
     public void interpret() {
+        System.out.println("Interpreting the parse tree...");
+        program.execute(this.symTab);
+        System.out.println("Interpretation complete.\n");
+
+        Errors.dump(symTab);
     }
 
     /**
@@ -68,7 +154,7 @@ public class ParseTree {
      * @see Machine.Instruction#execute()
      */
     public List< Machine.Instruction > compile() {
-        return null;
+        return program.emit();
     }
 
 }
