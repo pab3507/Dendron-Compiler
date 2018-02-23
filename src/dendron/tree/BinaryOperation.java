@@ -51,7 +51,11 @@ public class BinaryOperation implements ExpressionNode {
 
     @Override
     public void infixDisplay() {
-        System.out.printf("( %s %s %s )", this.leftChild, this.operator, this.rightChild);
+        System.out.print("( ");
+        this.leftChild.infixDisplay();
+        System.out.print(" " + this.operator + " ");
+        this.rightChild.infixDisplay();
+        System.out.print(" )");
     }
 
     @Override
