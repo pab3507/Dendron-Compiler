@@ -15,7 +15,7 @@ public class Print implements ActionNode {
 
     @Override
     public void execute(Map<String, Integer> symTab) {
-        printee.evaluate(symTab);
+        System.out.printf("=== %s\n",printee.evaluate(symTab));
     }
 
     @Override
@@ -27,6 +27,7 @@ public class Print implements ActionNode {
     @Override
     public List<Machine.Instruction> emit() {
         ArrayList<Machine.Instruction> list = new ArrayList<>();
+        list.addAll(this.printee.emit());
         list.add(new Machine.Print());
         return list;
     }
