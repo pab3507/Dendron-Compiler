@@ -23,13 +23,14 @@ public class Assignment implements ActionNode{
 
     @Override
     public void infixDisplay() {
-        System.out.printf(":= %s ",this.name);
+        System.out.printf("%s := ",this.name);
         this.rhs.infixDisplay();
     }
 
     @Override
     public List<Machine.Instruction> emit() {
         ArrayList<Machine.Instruction> list = new ArrayList<>();
+        list.addAll(rhs.emit());
         list.add(new Machine.Store(this.name));
         return list;
     }
