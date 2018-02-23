@@ -11,6 +11,10 @@ public class Variable implements ExpressionNode{
     public Variable(String name){
         this.name = name;
     }
+
+    public String getName(){
+        return this.name;
+    }
     @Override
     public int evaluate(Map<String, Integer> symTab) {
         return symTab.get(this.name);
