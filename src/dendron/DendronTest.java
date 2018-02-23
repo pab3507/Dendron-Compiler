@@ -1,8 +1,7 @@
 package dendron;
 
 import dendron.machine.Machine;
-import dendron_sol.machine.Machine;
-import dendron_sol.tree.ParseTree;
+import dendron.tree.ParseTree;
 
 import java.io.File;
 import java.io.FileNotFoundException;
