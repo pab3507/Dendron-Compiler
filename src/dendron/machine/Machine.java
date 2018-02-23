@@ -140,7 +140,7 @@ public class Machine {
          */
         @Override
         public void execute() {
-            stack.push(constant);
+            stack.push(this.constant);
         }
 
         /**
@@ -149,7 +149,7 @@ public class Machine {
          */
         @Override
         public String toString() {
-            return "PushConst";
+            return String.format("PUSH  %d",this.constant);
         }
     }
 
@@ -332,7 +332,7 @@ public class Machine {
          */
         @Override
         public String toString() {
-            return "LOAD";
+            return String.format("LOAD  %s",this.name);
         }
 
     }
