@@ -21,15 +21,18 @@ public class Program implements ActionNode{
 
     @Override
     public void execute(Map<String, Integer> symTab) {
+
         for (ActionNode node : actionList){
             node.execute(symTab);
         }
+
     }
 
     @Override
     public void infixDisplay() {
         for (ActionNode node : actionList){
             node.infixDisplay();
+            System.out.println();
         }
     }
 
