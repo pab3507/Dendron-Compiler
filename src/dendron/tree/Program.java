@@ -7,14 +7,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class Program implements ActionNode{
+public class Program implements ActionNode {
     private LinkedList<ActionNode> actionList;
 
-    public Program(){
+    public Program() {
         actionList = new LinkedList<>();
     }
 
-    public void addAction(ActionNode newNode){
+    public void addAction(ActionNode newNode) {
         actionList.add(newNode);
     }
 
@@ -22,7 +22,7 @@ public class Program implements ActionNode{
     @Override
     public void execute(Map<String, Integer> symTab) {
 
-        for (ActionNode node : actionList){
+        for (ActionNode node : actionList) {
             node.execute(symTab);
         }
 
@@ -30,7 +30,7 @@ public class Program implements ActionNode{
 
     @Override
     public void infixDisplay() {
-        for (ActionNode node : actionList){
+        for (ActionNode node : actionList) {
             node.infixDisplay();
             System.out.println();
         }
@@ -39,7 +39,7 @@ public class Program implements ActionNode{
     @Override
     public List<Machine.Instruction> emit() {
         ArrayList<Machine.Instruction> list = new ArrayList<>();
-        for (ActionNode node : actionList){
+        for (ActionNode node : actionList) {
             list.addAll(node.emit());
         }
         return list;

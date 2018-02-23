@@ -9,13 +9,13 @@ import java.util.*;
 
 /**
  * Operations that are done on a Dendron code parse tree.
- *
+ * <p>
  * THIS CLASS IS UNIMPLEMENTED. All methods are stubbed out.
  *
  * @author Pedro Creton
  */
 public class ParseTree {
-    private Map<String,Integer> symTab;
+    private Map<String, Integer> symTab;
     private ArrayList<List<String>> tokensClusters = new ArrayList<>();
     private ArrayList<ActionNode> actions = new ArrayList<>();
     private Program program;
@@ -26,30 +26,31 @@ public class ParseTree {
      * sequence of actions (statements), each of which modifies something
      * in the program's set of variables. The resulting parse tree is
      * stored internally.
+     *
      * @param program the token list (Strings)
      */
-    public ParseTree( List< String > program ) {
+    public ParseTree(List<String> program) {
         this.symTab = new HashMap<>();
         this.program = new Program();
-        for (String token : program){
-            switch (token){
+        for (String token : program) {
+            switch (token) {
                 case ":=":
                 case "@":
                     tokensClusters.add(new ArrayList<>());
-                    tokensClusters.get(tokensClusters.size()-1).add(token);
+                    tokensClusters.get(tokensClusters.size() - 1).add(token);
                     break;
                 default:
-                    tokensClusters.get(tokensClusters.size()-1).add(token);
+                    tokensClusters.get(tokensClusters.size() - 1).add(token);
             }
         }
 
-        for (List<String> tokens : tokensClusters){
-            for (int i = tokens.size()-1; i>=0; i--){
+        for (List<String> tokens : tokensClusters) {
+            for (int i = tokens.size() - 1; i >= 0; i--) {
                 String token = tokens.get(i);
-                switch (token){
+                switch (token) {
                     case ":=":
                         Variable var = (Variable) stack.pop();
-                        actions.add(new Assignment(var.getName(),(ExpressionNode) stack.pop()));
+                        actions.add(new Assignment(var.getName(), (ExpressionNode) stack.pop()));
                         break;
                     case "@":
                         actions.add(new Print((ExpressionNode) stack.pop()));
@@ -68,10 +69,10 @@ public class ParseTree {
                         break;
 
                     default:
-                        if (token.matches( "^[a-zA-Z].*" )){
+                        if (token.matches("^[a-zA-Z].*")) {
                             stack.push(new Variable(token));
 
-                        } else if (token.matches("[-+]?\\d+")){
+                        } else if (token.matches("[-+]?\\d+")) {
                             stack.push(new Constant(Integer.parseInt(token)));
                         } else {
                             Errors.report(Errors.Type.ILLEGAL_VALUE, "Not a valid Expression");
@@ -80,7 +81,7 @@ public class ParseTree {
             }
         }
 
-        for (ActionNode action : actions){
+        for (ActionNode action : actions) {
             this.program.addAction(action);
         }
 
@@ -160,6 +161,7 @@ public class ParseTree {
     /**
      * Print the program the tree represents in a more typical
      * infix style, and with one statement per line.
+     *
      * @see dendron.tree.ActionNode#infixDisplay()
      */
     public void displayProgram() {
@@ -170,6 +172,7 @@ public class ParseTree {
 
     /**
      * Run the program represented by the tree directly
+     *
      * @see dendron.tree.ActionNode#execute(Map)
      */
     public void interpret() {
@@ -183,10 +186,11 @@ public class ParseTree {
     /**
      * Build the list of machine instructions for
      * the program represented by the tree.
+     *
      * @return the Machine.Instruction list
      * @see Machine.Instruction#execute()
      */
-    public List< Machine.Instruction > compile() {
+    public List<Machine.Instruction> compile() {
         return program.emit();
     }
 

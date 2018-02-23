@@ -9,13 +9,13 @@ import java.util.Map;
 public class Print implements ActionNode {
     private ExpressionNode printee;
 
-    public Print(ExpressionNode printee){
+    public Print(ExpressionNode printee) {
         this.printee = printee;
     }
 
     @Override
     public void execute(Map<String, Integer> symTab) {
-        System.out.printf("=== %s\n",printee.evaluate(symTab));
+        System.out.printf("=== %s\n", printee.evaluate(symTab));
     }
 
     @Override

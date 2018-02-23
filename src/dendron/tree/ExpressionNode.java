@@ -16,5 +16,5 @@ public interface ExpressionNode extends DendronNode {
      * @param symTab symbol table, if needed, to fetch variable values
      * @return the result of the evaluation
      */
-    int evaluate( Map< String, Integer > symTab );
+    int evaluate(Map<String, Integer> symTab);
 }

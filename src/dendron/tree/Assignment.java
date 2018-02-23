@@ -6,24 +6,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Assignment implements ActionNode{
+public class Assignment implements ActionNode {
     private String name;
     private ExpressionNode rhs;
 
-    public Assignment(String ident, ExpressionNode rhs){
+    public Assignment(String ident, ExpressionNode rhs) {
         this.name = ident;
         this.rhs = rhs;
     }
 
     @Override
     public void execute(Map<String, Integer> symTab) {
-        symTab.put(this.name,this.rhs.evaluate(symTab));
+        symTab.put(this.name, this.rhs.evaluate(symTab));
 
     }
 
     @Override
     public void infixDisplay() {
-        System.out.printf("%s := ",this.name);
+        System.out.printf("%s := ", this.name);
         this.rhs.infixDisplay();
     }
 

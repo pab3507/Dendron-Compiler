@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Stack;
 import java.util.Map;
 import java.util.HashMap;
+
 import dendron.Errors;
 
 import static java.lang.Math.sqrt;
@@ -13,11 +14,11 @@ import static java.lang.Math.sqrt;
  * and executes them. It has an instruction set, a symbol table
  * for variables (instead of general-purpose memory), and a
  * value stack on which calculations are performed.
- *
+ * <p>
  * (Everything is static to avoid the need to master the subtleties
  * of nested class instantiation or to pass the symbol table and
  * stack into every instruction when it executes.)
- *
+ * <p>
  * THIS CLASS IS INCOMPLETE. The student must add code to it.
  *
  * @author James Heliotis
@@ -25,8 +26,11 @@ import static java.lang.Math.sqrt;
  */
 public class Machine {
 
-    /** Do not instatiate this class. */
-    private Machine() {}
+    /**
+     * Do not instatiate this class.
+     */
+    private Machine() {
+    }
 
     public static interface Instruction {
         /**
@@ -38,17 +42,19 @@ public class Machine {
         /**
          * Show the instruction using text so it can be understood
          * by a person.
+         *
          * @return a short string describing what this instruction will do
          */
         @Override
         String toString();
     }
 
-    private static Map< String, Integer > table = null;
-    private static Stack< Integer > stack = null;
+    private static Map<String, Integer> table = null;
+    private static Stack<Integer> stack = null;
 
     /**
      * Reset the Machine to a pristine state.
+     *
      * @see Machine#execute
      */
     private static void reset() {
@@ -64,10 +70,10 @@ public class Machine {
      * @param program the list of instructions in the program
      */
     public static void displayInstructions(
-            List< Machine.Instruction > program ) {
-        System.out.println( "\nCompiled code:" );
-        for ( Machine.Instruction instr: program ) {
-            System.out.println( instr );
+            List<Machine.Instruction> program) {
+        System.out.println("\nCompiled code:");
+        for (Machine.Instruction instr : program) {
+            System.out.println(instr);
         }
         System.out.println();
     }
@@ -77,47 +83,54 @@ public class Machine {
      * contained therein.
      * Report on the final size of the stack (should normally be empty)
      * and the contents of the symbol table.
+     *
      * @param program a list of Machine instructions
      */
-    public static void execute( List< Instruction > program ) {
+    public static void execute(List<Instruction> program) {
         reset();
         System.out.println("Executing compiled code...");
-        for ( Instruction instr: program ) {
+        for (Instruction instr : program) {
             instr.execute();
         }
-        System.out.println( "Machine: execution ended with " +
-                stack.size() + " items left on the stack." );
+        System.out.println("Machine: execution ended with " +
+                stack.size() + " items left on the stack.");
         System.out.println();
-        Errors.dump( table );
+        Errors.dump(table);
     }
 
     /**
      * The STORE instruction
      */
     public static class Store implements Instruction {
-        /** stores name of target variable */
+        /**
+         * stores name of target variable
+         */
         private String name;
 
         /**
          * Create a STORE instruction
+         *
          * @param ident the name of the target variable
          */
-        public Store( String ident ) {
+        public Store(String ident) {
             this.name = ident;
         }
+
         /**
          * Run the microsteps for the STORE instruction.
          */
         @Override
         public void execute() {
-            if (stack.size()>=1){
-                table.put( this.name, stack.pop() );
+            if (stack.size() >= 1) {
+                table.put(this.name, stack.pop());
             } else {
-                Errors.report(Errors.Type.PREMATURE_END,"Program has reached PREMATURE_END");
+                Errors.report(Errors.Type.PREMATURE_END, "Program has reached PREMATURE_END");
             }
         }
+
         /**
          * Show the STORE instruction as plain text.
+         *
          * @return "STORE" followed by the target variable name
          */
         @Override
@@ -129,9 +142,10 @@ public class Machine {
     /**
      * The PushConst instruction
      */
-    public static class PushConst implements Instruction{
+    public static class PushConst implements Instruction {
         private final int constant;
-        public PushConst(int constant){
+
+        public PushConst(int constant) {
             this.constant = constant;
         }
 
@@ -145,34 +159,36 @@ public class Machine {
 
         /**
          * Show the PushConst instruction as plain text.
+         *
          * @return "PushConst"
          */
         @Override
         public String toString() {
-            return String.format("PUSH  %d",this.constant);
+            return String.format("PUSH  %d", this.constant);
         }
     }
 
     /**
      * The PRINT instruction
      */
-    public static class Print implements Instruction{
+    public static class Print implements Instruction {
 
         /**
          * Run the microsteps for the PRINT instruction.
          */
         @Override
         public void execute() {
-            if (stack.size()>=1){
-            int val = stack.pop();
-            System.out.printf("*** %d\n", val);
+            if (stack.size() >= 1) {
+                int val = stack.pop();
+                System.out.printf("*** %d\n", val);
             } else {
-                Errors.report(Errors.Type.PREMATURE_END,"Program has reached PREMATURE_END");
+                Errors.report(Errors.Type.PREMATURE_END, "Program has reached PREMATURE_END");
             }
         }
 
         /**
          * Show the PRINT instruction as plain text.
+         *
          * @return "PRINT"
          */
         @Override
@@ -194,17 +210,18 @@ public class Machine {
          */
         @Override
         public void execute() {
-            if (stack.size()>=2){
-            int op2 = stack.pop();
-            int op1 = stack.pop();
-            stack.push( op1 + op2 );
+            if (stack.size() >= 2) {
+                int op2 = stack.pop();
+                int op1 = stack.pop();
+                stack.push(op1 + op2);
             } else {
-                Errors.report(Errors.Type.PREMATURE_END,"Program has reached PREMATURE_END");
+                Errors.report(Errors.Type.PREMATURE_END, "Program has reached PREMATURE_END");
             }
         }
 
         /**
          * Show the ADD instruction as plain text.
+         *
          * @return "ADD"
          */
         @Override
@@ -234,6 +251,7 @@ public class Machine {
 
         /**
          * Show the SUB instruction as plain text.
+         *
          * @return "SUB"
          */
         @Override
@@ -251,21 +269,22 @@ public class Machine {
          */
         @Override
         public void execute() {
-            if (stack.size()>=2){
-            int op2 = stack.pop();
-            int op1 = stack.pop();
-            if (op2!= 0) {
-                stack.push( op1 / op2 );
+            if (stack.size() >= 2) {
+                int op2 = stack.pop();
+                int op1 = stack.pop();
+                if (op2 != 0) {
+                    stack.push(op1 / op2);
+                } else {
+                    Errors.report(Errors.Type.DIVIDE_BY_ZERO, "Integer divide by zero");
+                }
             } else {
-                Errors.report(Errors.Type.DIVIDE_BY_ZERO,"Integer divide by zero");
-            }
-            } else {
-                Errors.report(Errors.Type.PREMATURE_END,"Program has reached PREMATURE_END");
+                Errors.report(Errors.Type.PREMATURE_END, "Program has reached PREMATURE_END");
             }
         }
 
         /**
          * Show the DIV instruction as plain text.
+         *
          * @return "DIV"
          */
         @Override
@@ -283,17 +302,18 @@ public class Machine {
          */
         @Override
         public void execute() {
-            if (stack.size()>=2) {
+            if (stack.size() >= 2) {
                 int op2 = stack.pop();
                 int op1 = stack.pop();
                 stack.push(op1 * op2);
             } else {
-                Errors.report(Errors.Type.PREMATURE_END,"Program has reached PREMATURE_END");
+                Errors.report(Errors.Type.PREMATURE_END, "Program has reached PREMATURE_END");
             }
         }
 
         /**
          * Show the MUL instruction as plain text.
+         *
          * @return "MUL"
          */
         @Override
@@ -305,10 +325,10 @@ public class Machine {
     /**
      * The LOAD instruction
      */
-    public static class Load implements Instruction{
+    public static class Load implements Instruction {
         private String name;
 
-        public Load(String ident){
+        public Load(String ident) {
             this.name = ident;
         }
 
@@ -321,18 +341,19 @@ public class Machine {
                 int val = table.get(this.name);
                 stack.push(val);
             } else {
-                Errors.report(Errors.Type.UNINITIALIZED,"Variable is not initialized");
+                Errors.report(Errors.Type.UNINITIALIZED, "Variable is not initialized");
             }
 
         }
 
         /**
          * Show the LOAD instruction as plain text.
+         *
          * @return "LOAD"
          */
         @Override
         public String toString() {
-            return String.format("LOAD  %s",this.name);
+            return String.format("LOAD  %s", this.name);
         }
 
     }
@@ -351,11 +372,12 @@ public class Machine {
         @Override
         public void execute() {
             int op1 = stack.pop();
-            stack.push( -op1 );
+            stack.push(-op1);
         }
 
         /**
          * Show the NEG instruction as plain text.
+         *
          * @return "NEG"
          */
         @Override
@@ -374,11 +396,12 @@ public class Machine {
         @Override
         public void execute() {
             int op1 = stack.pop();
-            stack.push( (int) sqrt(op1) );
+            stack.push((int) sqrt(op1));
         }
 
         /**
          * Show the SQRT instruction as plain text.
+         *
          * @return "SQRT"
          */
         @Override

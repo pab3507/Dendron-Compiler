@@ -14,7 +14,8 @@ public interface ActionNode extends DendronNode {
     /**
      * Perform the action represented by this node. Actions are
      * things like changing variable values.
+     *
      * @param symTab the table where variable values are stored
      */
-    void execute( Map< String, Integer > symTab );
+    void execute(Map<String, Integer> symTab);
 }

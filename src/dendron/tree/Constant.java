@@ -9,7 +9,7 @@ import java.util.Map;
 public class Constant implements ExpressionNode {
     private final int value;
 
-    public Constant(int value){
+    public Constant(int value) {
         this.value = value;
     }
 
@@ -20,7 +20,7 @@ public class Constant implements ExpressionNode {
 
     @Override
     public void infixDisplay() {
-        System.out.printf("%d",this.value);
+        System.out.printf("%d", this.value);
 
     }
 

@@ -1,11 +1,12 @@
 package dendron.tree;
 
 import java.util.List;
+
 import dendron.machine.Machine;
 
 /**
  * The top-level abstraction for all nodes in the Dendron parse tree.
- *
+ * <p>
  * All nodes are capable of being displayed as part of an infix-format string,
  * and of emitting machine instructions so that they can be executed later.
  *
@@ -21,9 +22,10 @@ public interface DendronNode {
     /**
      * Generate a list of instructions that, when executed, represents
      * the intent of this DendronNode and its descendants.
+     *
      * @return the Machine Instructions for this node
      */
-    List<  Machine.Instruction> emit();
+    List<Machine.Instruction> emit();
 }
 
 

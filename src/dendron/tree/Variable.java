@@ -6,15 +6,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Variable implements ExpressionNode{
+public class Variable implements ExpressionNode {
     private String name;
-    public Variable(String name){
+
+    public Variable(String name) {
         this.name = name;
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
+
     @Override
     public int evaluate(Map<String, Integer> symTab) {
         return symTab.get(this.name);
@@ -22,7 +24,7 @@ public class Variable implements ExpressionNode{
 
     @Override
     public void infixDisplay() {
-        System.out.printf("%s",this.name);
+        System.out.printf("%s", this.name);
 
     }
 
