@@ -12,7 +12,7 @@ import java.util.*;
  * <p>
  * THIS CLASS IS UNIMPLEMENTED. All methods are stubbed out.
  *
- * @author Pedro Creton
+ * @author Pedro Breton
  */
 public class ParseTree {
     private Map<String, Integer> symTab;
@@ -32,6 +32,8 @@ public class ParseTree {
     public ParseTree(List<String> program) {
         this.symTab = new HashMap<>();
         this.program = new Program();
+
+        // For loop makes a new list of collections of tokens that represent an action expression
         for (String token : program) {
             switch (token) {
                 case ":=":
@@ -44,6 +46,8 @@ public class ParseTree {
             }
         }
 
+        // For every collection of tokens in tokencluster use a stack to parse the action expression
+        // THe collection is read from right to left, pushing and popping when needed.
         for (List<String> tokens : tokensClusters) {
             for (int i = tokens.size() - 1; i >= 0; i--) {
                 String token = tokens.get(i);
@@ -81,6 +85,7 @@ public class ParseTree {
             }
         }
 
+        // Add every action node to the Program
         for (ActionNode action : actions) {
             this.program.addAction(action);
         }

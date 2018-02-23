@@ -22,7 +22,7 @@ import static java.lang.Math.sqrt;
  * THIS CLASS IS INCOMPLETE. The student must add code to it.
  *
  * @author James Heliotis
- * @author YOUR NAME HERE
+ * @author Pedro Breton
  */
 public class Machine {
 

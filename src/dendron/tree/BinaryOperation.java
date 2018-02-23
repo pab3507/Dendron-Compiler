@@ -5,6 +5,10 @@ import dendron.machine.Machine;
 
 import java.util.*;
 
+/**
+ * A calculation represented by a binary operator and its two operands.
+ * @author Pedro Breton
+ */
 public class BinaryOperation implements ExpressionNode {
     public static final String ADD = "+";
     public static final String SUB = "-";
@@ -16,6 +20,12 @@ public class BinaryOperation implements ExpressionNode {
     private ExpressionNode leftChild;
     private ExpressionNode rightChild;
 
+    /**
+     * Create a new BinaryOperation node.
+     * @param operator the string rep. of the operation
+     * @param leftChild the left operand
+     * @param rightChild the right operand
+     */
     public BinaryOperation(String operator, ExpressionNode leftChild, ExpressionNode rightChild) {
         if (OPERATORS.contains(operator)) {
             this.operator = operator;
@@ -27,6 +37,11 @@ public class BinaryOperation implements ExpressionNode {
 
     }
 
+    /**
+     * Compute the result of evaluating both operands and applying the operator to them.
+     * @param symTab symbol table, if needed, to fetch variable values
+     * @return the result of the computation
+     */
     @Override
     public int evaluate(Map<String, Integer> symTab) {
         int a = leftChild.evaluate(symTab);
@@ -49,6 +64,10 @@ public class BinaryOperation implements ExpressionNode {
         }
     }
 
+    /**
+     * Print the infixDisplay of the two child nodes separated by the operator and surrounded by parentheses.
+     * Blanks are inserted throughout
+     */
     @Override
     public void infixDisplay() {
         System.out.print("( ");
@@ -58,6 +77,13 @@ public class BinaryOperation implements ExpressionNode {
         System.out.print(" )");
     }
 
+    /**
+     * Emit the Machine instructions necessary to perform the computation of this BinaryOperation. T
+     * he operator itself is realized by an instruction that pops two values off the stack, applies the operator,
+     * and pushes the answer.
+     * @return a list containing instructions for the left operand, instructions for the right operand,
+     * and the instruction to perform the operation
+     */
     @Override
     public List<Machine.Instruction> emit() {
         ArrayList<Machine.Instruction> list = new ArrayList<>();
