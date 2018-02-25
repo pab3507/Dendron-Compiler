@@ -371,8 +371,13 @@ public class Machine {
          */
         @Override
         public void execute() {
-            int op1 = stack.pop();
-            stack.push(-op1);
+            if (stack.size() >= 2) {
+                int op1 = stack.pop();
+                stack.push(-op1);
+            } else {
+                Errors.report(Errors.Type.PREMATURE_END, "Program has reached PREMATURE_END");
+            }
+
         }
 
         /**
@@ -395,8 +400,12 @@ public class Machine {
          */
         @Override
         public void execute() {
-            int op1 = stack.pop();
-            stack.push((int) sqrt(op1));
+            if (stack.size() >= 2) {
+                int op1 = stack.pop();
+                stack.push((int) sqrt(op1));
+            } else {
+                Errors.report(Errors.Type.PREMATURE_END, "Program has reached PREMATURE_END");
+            }
         }
 
         /**
