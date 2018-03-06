@@ -1,5 +1,6 @@
 package dendron.tree;
 
+import dendron.Errors;
 import dendron.machine.Machine;
 
 import java.util.ArrayList;
@@ -37,7 +38,13 @@ public class Variable implements ExpressionNode {
      */
     @Override
     public int evaluate(Map<String, Integer> symTab) {
-        return symTab.get(this.name);
+        if (symTab.containsKey(this.name)){
+            return symTab.get(this.name);
+        } else {
+            Errors.report(Errors.Type.PREMATURE_END, "Reach premature end");
+            return -1;
+        }
+
     }
 
     /**
