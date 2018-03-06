@@ -371,7 +371,7 @@ public class Machine {
          */
         @Override
         public void execute() {
-            if (stack.size() >= 2) {
+            if (stack.size() >= 1) {
                 int op1 = stack.pop();
                 stack.push(-op1);
             } else {
@@ -400,7 +400,7 @@ public class Machine {
          */
         @Override
         public void execute() {
-            if (stack.size() >= 2) {
+            if (stack.size() >= 1) {
                 int op1 = stack.pop();
                 stack.push((int) sqrt(op1));
             } else {
