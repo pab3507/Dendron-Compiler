@@ -402,7 +402,11 @@ public class Machine {
         public void execute() {
             if (stack.size() >= 1) {
                 int op1 = stack.pop();
-                stack.push((int) sqrt(op1));
+                if (op1>=0) {
+                    stack.push((int) sqrt(op1));
+                } else {
+                    Errors.report(Errors.Type.ILLEGAL_VALUE, "Negative square root");
+                }
             } else {
                 Errors.report(Errors.Type.PREMATURE_END, "Program has reached PREMATURE_END");
             }

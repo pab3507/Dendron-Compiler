@@ -43,7 +43,14 @@ public class UnaryOperation implements ExpressionNode {
             case NEG:
                 return -1 * this.expr.evaluate(symTab);
             case SQRT:
-                return (int) Math.sqrt(this.expr.evaluate(symTab));
+                int eval = this.expr.evaluate(symTab);
+
+                if (eval >= 0){
+                    return (int) Math.sqrt(this.expr.evaluate(symTab));
+                } else{
+                    Errors.report(Errors.Type.ILLEGAL_VALUE,"Negative root");
+                }
+
         }
         return 0;
     }
